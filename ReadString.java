@@ -27,7 +27,6 @@ public class ReadString {
                     if (input.charAt(i) == '.')
                     {
                         dfa = states.numWDecimal;
-                        finalNumber += (Character.valueOf(input.charAt(i)) *  Math.pow(10, i));
                     }
                     else if (input.charAt(i) == '1' ||
                             input.charAt(i) == '2' ||
