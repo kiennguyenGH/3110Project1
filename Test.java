@@ -3,12 +3,22 @@ public class Test
 {
     public static void main (String[] args)
     {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter a java floating point literal:");
-        String input = scanner.nextLine();
-        scanner.close();
         ReadString reader = new ReadString();
-        System.out.println(reader.GetFloat(input));
+        String value = "";
+        Scanner scanner = new Scanner(System.in);
+        
+        while (true)
+        {
+            System.out.println("Enter a java floating point literal: (q to quit)");
+            value = scanner.nextLine();
+            if (value.equals("q"))
+            {
+                break;
+            }
+            
+            System.out.println(reader.GetFloat(value));
+        }
+        scanner.close();
 
     }
 }
