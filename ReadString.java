@@ -1,10 +1,10 @@
+import java.lang.Math;
 public class ReadString {
 
     private enum states {
         start,
         num,
         numWDecimal,
-        exponentStart,
         exponent,
         done,
         fail
@@ -13,29 +13,21 @@ public class ReadString {
 
     public String GetFloat(String input)
     {
-        String number = "";
         states dfa = states.start;
         float finalNumber = 0;
-        float nonExponent = 0;
-        boolean isNegative = false;
-        boolean isNegativeExponent = false;
-        boolean notParsed = false;
+        float exponent = 0;
+        float exponentIndex = 0;
+        float decimalIndex = -1;
         for (int i = 0; i < input.length(); i++)
         {
             switch (dfa)
             {
-
                 case start:
                 {
-                    if (input.charAt(i) == '-')
-                    {
-                        isNegative = true;
-                        dfa = states.num;
-                    }
-                    else if (input.charAt(i) == '.')
+                    if (input.charAt(i) == '.')
                     {
                         dfa = states.numWDecimal;
-                        number += input.charAt(i);
+                        finalNumber += (Character.valueOf(input.charAt(i)) *  Math.pow(10, i));
                     }
                     else if (input.charAt(i) == '1' ||
                             input.charAt(i) == '2' ||
@@ -49,7 +41,7 @@ public class ReadString {
                             input.charAt(i) == '0')
                     {
                         dfa = states.num;
-                        number += input.charAt(i);
+                        finalNumber += (Character.valueOf(input.charAt(i)) *  Math.pow(10, i));
                     }
                     else
                     {
@@ -70,24 +62,27 @@ public class ReadString {
                     input.charAt(i) == '0')
                     {
                         dfa = states.num;
-                        number += input.charAt(i);
+                        finalNumber += (Character.valueOf(input.charAt(i)) *  Math.pow(10, i));
                     }
                     else if (input.charAt(i) == '.')
                     {
                         dfa = states.numWDecimal;
-                        number += input.charAt(i);
                     }
                     else if (input.charAt(i) == 'e' ||
                             input.charAt(i) == 'E')
                     {
 
-                        dfa = states.exponentStart;
+                        dfa = states.exponent;
                     }
                     else if (input.charAt(i) == 'd' ||
                             input.charAt(i) == 'D' ||
                             input.charAt(i) == 'f' ||
                             input.charAt(i) == 'F')
                     {
+                        if (i + 1 != input.length())
+                        {
+                            dfa = states.fail;
+                        }
                         dfa = states.done;
                     }
                     else
@@ -107,14 +102,14 @@ public class ReadString {
                     input.charAt(i) == '9' ||
                     input.charAt(i) == '0')
                     {
-                        dfa = states.num;
-                        number += input.charAt(i);
+                        dfa = states.numWDecimal;
+                        finalNumber += (Character.valueOf(input.charAt(i)) *  Math.pow(10, decimalIndex));
+                        decimalIndex--;
                     }
                     else if (input.charAt(i) == 'e' ||
                             input.charAt(i) == 'E')
                     {
-
-                        dfa = states.exponentStart;
+                        dfa = states.exponent;
                     }
                     else if (input.charAt(i) == 'd' ||
                             input.charAt(i) == 'D' ||
@@ -128,31 +123,26 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
-                case exponentStart:
-                    if (input.charAt(i) == '-')
-                    {
-                        isNegativeExponent = true;
-                        dfa = states.exponent;
-                    }
-                    else if (input.charAt(i) == '1' ||
-                            input.charAt(i) == '2' ||
-                            input.charAt(i) == '3' ||
-                            input.charAt(i) == '4' ||
-                            input.charAt(i) == '5' ||
-                            input.charAt(i) == '6' ||
-                            input.charAt(i) == '7' ||
-                            input.charAt(i) == '8' ||
-                            input.charAt(i) == '9' ||
-                            input.charAt(i) == '0')
+                case exponent:
+                    if (input.charAt(i) == '1' ||
+                        input.charAt(i) == '2' ||
+                        input.charAt(i) == '3' ||
+                        input.charAt(i) == '4' ||
+                        input.charAt(i) == '5' ||
+                        input.charAt(i) == '6' ||
+                        input.charAt(i) == '7' ||
+                        input.charAt(i) == '8' ||
+                        input.charAt(i) == '9' ||
+                        input.charAt(i) == '0')
                     {
                         dfa = states.exponent;
+                        exponent += (Character.valueOf(input.charAt(i)) *  Math.pow(10, exponentIndex));
+                        exponentIndex++;
                     }
                     else
                     {
                         dfa = states.fail;
                     }
-                case exponent:
-                    break;
                 default:
                     dfa = states.fail;
                     break;
@@ -161,18 +151,17 @@ public class ReadString {
             {
                 return "";
             }
-
+            if (i + 1 == input.length() && dfa != states.fail)
+            {
+                dfa = states.done;
+            }
         }
-        
-        if (!notParsed) 
+        if (dfa == states.done)
         {
-            finalNumber = Float.parseFloat(number);
-        }
-        if (isNegative)
-        {
-            finalNumber *= -1;
+            finalNumber *= Math.pow(10, exponent);
         }  
-        number = String.valueOf(finalNumber);
-        return number; 
+
+        
+        return String.valueOf(finalNumber); 
     }
 }
