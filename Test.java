@@ -4,19 +4,19 @@ public class Test
     public static void main (String[] args)
     {
         ReadString reader = new ReadString();
-        String value = "";
+        String input = "";
         Scanner scanner = new Scanner(System.in);
         
         while (true)
         {
             System.out.println("Enter a java floating point literal: (q to quit)");
-            value = scanner.nextLine();
-            if (value.equals("q"))
+            input = scanner.nextLine();
+            if (input.equals("q"))
             {
                 break;
             }
             
-            System.out.println(reader.GetFloat(value));
+            System.out.println(reader.GetFloat(input));
         }
         scanner.close();
 
