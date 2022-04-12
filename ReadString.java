@@ -4,7 +4,7 @@ public class ReadString {
     private enum states {
         start,
         num,
-        numWDecimal,
+        decimal,
         exponent,
         done,
         fail
@@ -14,9 +14,10 @@ public class ReadString {
     public String GetFloat(String input)
     {
         states dfa = states.start;
+        String nonDecimal = "";
+        String eValue = "";
         float finalNumber = 0;
-        float exponent = 0;
-        float exponentIndex = 0;
+        float exponentValue = 0;
         float decimalIndex = -1;
         for (int i = 0; i < input.length(); i++)
         {
@@ -26,7 +27,7 @@ public class ReadString {
                 {
                     if (input.charAt(i) == '.')
                     {
-                        dfa = states.numWDecimal;
+                        dfa = states.decimal;
                     }
                     else if (input.charAt(i) == '1' ||
                             input.charAt(i) == '2' ||
@@ -40,7 +41,7 @@ public class ReadString {
                             input.charAt(i) == '0')
                     {
                         dfa = states.num;
-                        finalNumber += (Character.valueOf(input.charAt(i)) *  Math.pow(10, i));
+                        nonDecimal += input.charAt(i);
                     }
                     else
                     {
@@ -61,11 +62,11 @@ public class ReadString {
                     input.charAt(i) == '0')
                     {
                         dfa = states.num;
-                        finalNumber += (Character.valueOf(input.charAt(i)) *  Math.pow(10, i));
+                        nonDecimal += input.charAt(i);
                     }
                     else if (input.charAt(i) == '.')
                     {
-                        dfa = states.numWDecimal;
+                        dfa = states.decimal;
                     }
                     else if (input.charAt(i) == 'e' ||
                             input.charAt(i) == 'E')
@@ -82,14 +83,14 @@ public class ReadString {
                         {
                             dfa = states.fail;
                         }
-                        dfa = states.done;
+                        else dfa = states.done;
                     }
                     else
                     {
                         dfa = states.fail;
                     }
                     break;
-                case numWDecimal:
+                case decimal:
                     if (input.charAt(i) == '1' ||
                     input.charAt(i) == '2' ||
                     input.charAt(i) == '3' ||
@@ -101,9 +102,8 @@ public class ReadString {
                     input.charAt(i) == '9' ||
                     input.charAt(i) == '0')
                     {
-                        dfa = states.numWDecimal;
-                        finalNumber += (Character.valueOf(input.charAt(i)) *  Math.pow(10, decimalIndex));
-                        decimalIndex--;
+                        dfa = states.decimal;
+                        finalNumber += (Character.getNumericValue(input.charAt(i)) *  Math.pow(10, decimalIndex));
                     }
                     else if (input.charAt(i) == 'e' ||
                             input.charAt(i) == 'E')
@@ -121,6 +121,7 @@ public class ReadString {
                     {
                         dfa = states.fail;
                     }
+                    decimalIndex--;
                     break;
                 case exponent:
                     if (input.charAt(i) == '1' ||
@@ -135,13 +136,13 @@ public class ReadString {
                         input.charAt(i) == '0')
                     {
                         dfa = states.exponent;
-                        exponent += (Character.valueOf(input.charAt(i)) *  Math.pow(10, exponentIndex));
-                        exponentIndex++;
+                        eValue += input.charAt(i);
                     }
                     else
                     {
                         dfa = states.fail;
                     }
+                    break;
                 default:
                     dfa = states.fail;
                     break;
@@ -150,16 +151,27 @@ public class ReadString {
             {
                 return "";
             }
-            if (i + 1 == input.length() && dfa != states.fail)
-            {
-                dfa = states.done;
-            }
         }
+        if (dfa == states.fail)
+        {
+            return "";
+        }
+        else dfa = states.done;
+        System.out.println(finalNumber);
+        System.out.println(nonDecimal);
+        System.out.println(eValue);
         if (dfa == states.done)
         {
-            finalNumber *= Math.pow(10, exponent);
+            for (int i = nonDecimal.length() - 1; i >= 0; i--)
+            {
+                finalNumber += Character.getNumericValue(nonDecimal.charAt(i)) * Math.pow(10, i);
+            }
+            for (int i = eValue.length() - 1; i >= 0; i--)
+            {
+                exponentValue += Character.getNumericValue(eValue.charAt(i)) * Math.pow(10,i);
+            }
+            finalNumber *= Math.pow(10, exponentValue);
         }  
-
         
         return String.valueOf(finalNumber); 
     }
