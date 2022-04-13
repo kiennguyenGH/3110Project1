@@ -16,7 +16,7 @@ public class Test
                 break;
             }
             
-            System.out.println(reader.GetFloat(input));
+            reader.GetFloat(input);
         }
         scanner.close();
 
