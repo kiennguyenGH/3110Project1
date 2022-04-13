@@ -21,7 +21,7 @@ public class ReadString {
     public void GetFloat(String input)
     {
         states dfa = states.start;
-        states previousState;
+        states previousState = states.start;
         String nonDecimal = "";
         String eValue = "";
         float finalNumber = 0;
@@ -31,7 +31,6 @@ public class ReadString {
         //Traverse through each input
         for (int i = 0; i < input.length(); i++)
         {
-            previousState = dfa;
             switch (dfa)
             {
                 // Start state
@@ -39,6 +38,7 @@ public class ReadString {
                 {
                     if (input.charAt(i) == '.')
                     {
+                        previousState = dfa;
                         dfa = states.decimalStart;
                     }
                     else if (input.charAt(i) == '1' ||
@@ -52,11 +52,13 @@ public class ReadString {
                             input.charAt(i) == '9' ||
                             input.charAt(i) == '0')
                     {
+                        previousState = dfa;
                         dfa = states.num;
                         nonDecimal += input.charAt(i);
                     }
                     else
                     {
+                        previousState = dfa;
                         dfa = states.fail;
                     }
                     break;
@@ -75,21 +77,24 @@ public class ReadString {
                     input.charAt(i) == '9' ||
                     input.charAt(i) == '0')
                     {
+                        previousState = dfa;
                         dfa = states.num;
                         nonDecimal += input.charAt(i);
                     }
                     else if (input.charAt(i) == '.')
                     {
+                        previousState = dfa;
                         dfa = states.decimalStart;
                     }
                     else if (input.charAt(i) == '_')
                     {
+                        previousState = dfa;
                         dfa = states.underscoreNum;
                     }
                     else if (input.charAt(i) == 'e' ||
                             input.charAt(i) == 'E')
                     {
-
+                        previousState = dfa;
                         dfa = states.exponentStart;
                     }
                     else if (input.charAt(i) == 'd' ||
@@ -99,6 +104,7 @@ public class ReadString {
                     {
                         if (i + 1 != input.length())
                         {
+                            previousState = dfa;
                             dfa = states.fail;
                         }
                         else dfa = states.done;
@@ -122,6 +128,7 @@ public class ReadString {
                     input.charAt(i) == '9' ||
                     input.charAt(i) == '0')
                     {
+                        previousState = dfa;
                         dfa = states.decimal;
                         finalNumber += (Character.getNumericValue(input.charAt(i)) *  Math.pow(10, decimalIndex));
                         decimalIndex--;
@@ -129,9 +136,11 @@ public class ReadString {
                     else if (input.charAt(i) == 'e' ||
                             input.charAt(i) == 'E')
                     {
+                        // dfa = states.exponentStart;
                         if (previousState == states.num)
                         {
-                            dfa = states.num;
+                            previousState = dfa;
+                            dfa = states.exponentStart;
                         }
                         else
                         {
