@@ -104,6 +104,7 @@ public class ReadString {
                     {
                         dfa = states.decimal;
                         finalNumber += (Character.getNumericValue(input.charAt(i)) *  Math.pow(10, decimalIndex));
+                        decimalIndex--;
                     }
                     else if (input.charAt(i) == 'e' ||
                             input.charAt(i) == 'E')
@@ -121,7 +122,6 @@ public class ReadString {
                     {
                         dfa = states.fail;
                     }
-                    decimalIndex--;
                     break;
                 case exponent:
                     if (input.charAt(i) == '1' ||
@@ -157,16 +157,16 @@ public class ReadString {
             return "";
         }
         else dfa = states.done;
-        System.out.println(finalNumber);
-        System.out.println(nonDecimal);
-        System.out.println(eValue);
         if (dfa == states.done)
         {
-            for (int i = nonDecimal.length() - 1; i >= 0; i--)
+            float power = nonDecimal.length() - 1;
+            for (int i = 0; i < nonDecimal.length(); i++)
             {
-                finalNumber += Character.getNumericValue(nonDecimal.charAt(i)) * Math.pow(10, i);
+                finalNumber += Character.getNumericValue(nonDecimal.charAt(i)) * Math.pow(10, power);
+                power--;
             }
-            for (int i = eValue.length() - 1; i >= 0; i--)
+            power = eValue.length() - 1;
+            for (int i = 0; i < eValue.length(); i++)
             {
                 exponentValue += Character.getNumericValue(eValue.charAt(i)) * Math.pow(10,i);
             }
