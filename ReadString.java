@@ -138,6 +138,17 @@ public class ReadString {
                         dfa = states.exponent;
                         eValue += input.charAt(i);
                     }
+                    else if (input.charAt(i) == 'd' ||
+                            input.charAt(i) == 'D' ||
+                            input.charAt(i) == 'f' ||
+                            input.charAt(i) == 'F')
+                    {
+                        if (i + 1 != input.length())
+                        {
+                            dfa = states.fail;
+                        }
+                        else dfa = states.done;
+                    }
                     else
                     {
                         dfa = states.fail;
