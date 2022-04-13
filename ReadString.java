@@ -1,5 +1,6 @@
 import java.lang.Math;
 
+// Set of states
 public class ReadString {
 
     private enum states {
@@ -16,7 +17,7 @@ public class ReadString {
         fail
     }
 
-
+    //Use dfa to read string input
     public void GetFloat(String input)
     {
         states dfa = states.start;
@@ -26,11 +27,14 @@ public class ReadString {
         float finalNumber = 0;
         float exponentValue = 0;
         float decimalIndex = -1;
+
+        //Traverse through each input
         for (int i = 0; i < input.length(); i++)
         {
             previousState = dfa;
             switch (dfa)
             {
+                // Start state
                 case start:
                 {
                     if (input.charAt(i) == '.')
@@ -57,6 +61,8 @@ public class ReadString {
                     }
                     break;
                 }
+
+                // Whole number digit state
                 case num:
                     if (input.charAt(i) == '1' ||
                     input.charAt(i) == '2' ||
@@ -102,6 +108,8 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
+                
+                //Decimal point state (when input reads '.')
                 case decimalStart:
                     if (input.charAt(i) == '1' ||
                     input.charAt(i) == '2' ||
@@ -142,6 +150,8 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
+
+                //Fraction digit state (digits read are decimals)
                 case decimal:
                     if (input.charAt(i) == '1' ||
                     input.charAt(i) == '2' ||
@@ -183,6 +193,8 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
+
+                //Underscore state for whole numbers
                 case underscoreNum:
                     if (input.charAt(i) == '1' ||
                         input.charAt(i) == '2' ||
@@ -207,6 +219,8 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
+
+                //Underscore state for decimal numbers
                 case underscoreDecimal:
                     if (input.charAt(i) == '1' ||
                     input.charAt(i) == '2' ||
@@ -232,6 +246,8 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
+
+                //State for start of exponents (when 'e' or 'E' is read)
                 case exponentStart:
                     if (input.charAt(i) == '1' ||
                         input.charAt(i) == '2' ||
@@ -252,6 +268,7 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
+                //Exponent state (digits read are exponents)
                 case exponent:
                     if (input.charAt(i) == '1' ||
                         input.charAt(i) == '2' ||
@@ -287,6 +304,8 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
+
+                //Underscore state for exponents
                 case underscoreExponent:
                     if (input.charAt(i) == '1' ||
                     input.charAt(i) == '2' ||
@@ -311,6 +330,7 @@ public class ReadString {
                         dfa = states.fail;
                     }
                     break;
+                //If program is not in a valid state, automatically fail
                 default:
                     dfa = states.fail;
                     break;
@@ -322,6 +342,7 @@ public class ReadString {
         }
 
         // Check if final state is accept state
+        // If in non-accept state, print out empty string
         if (dfa == states.fail || 
             dfa == states.num ||
             dfa == states.exponentStart)
@@ -329,6 +350,11 @@ public class ReadString {
             System.out.println();
         }
         else dfa = states.done;
+        // Else accept and print out valid float
+        // Calculated by moving whole numbers and exponents to separate strings, and adding all decimals to final value
+        // Then traverse through whole number string and individually add each digit to final value
+        // Then add each digit of exponent string to separate value, and use that separate value to multiply (final value * 10e(exponent value))
+        // to get final float value
         if (dfa == states.done)
         {
             float power = nonDecimal.length() - 1;
