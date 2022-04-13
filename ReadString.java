@@ -354,7 +354,7 @@ public class ReadString {
         // If in non-accept state, print out empty string
         if (dfa == states.fail || 
             dfa == states.num ||
-            dfa == states.exponentStart)
+            dfa == states.exponentStart || dfa == states.decimalStart && previousState == states.start)
         {
             System.out.println();
         }
