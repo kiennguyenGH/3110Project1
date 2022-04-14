@@ -7,6 +7,7 @@ public class ReadString {
         start,
         num,
         underscoreNum,
+        decimalOnly,
         decimalStart,
         decimal,
         underscoreDecimal,
@@ -39,7 +40,7 @@ public class ReadString {
                     if (input.charAt(i) == '.')
                     {
                         previousState = dfa;
-                        dfa = states.decimalStart;
+                        dfa = states.decimalOnly;
                     }
                     else if (input.charAt(i) == '1' ||
                             input.charAt(i) == '2' ||
@@ -115,6 +116,29 @@ public class ReadString {
                     }
                     break;
                 
+                //State when first input is '.'
+                case decimalOnly:
+                    if (input.charAt(i) == '1' ||
+                    input.charAt(i) == '2' ||
+                    input.charAt(i) == '3' ||
+                    input.charAt(i) == '4' ||
+                    input.charAt(i) == '5' ||
+                    input.charAt(i) == '6' ||
+                    input.charAt(i) == '7' ||
+                    input.charAt(i) == '8' ||
+                    input.charAt(i) == '9' ||
+                    input.charAt(i) == '0')
+                    {
+                        previousState = dfa;
+                        dfa = states.decimal;
+                        finalNumber += (Character.getNumericValue(input.charAt(i)) *  Math.pow(10, decimalIndex));
+                        decimalIndex--;
+                    }
+                    else
+                    {
+                        dfa = states.fail;
+                    }
+                    break;
                 //Decimal point state (when input reads '.')
                 case decimalStart:
                     if (input.charAt(i) == '1' ||
@@ -354,7 +378,10 @@ public class ReadString {
         // If in non-accept state, print out empty string
         if (dfa == states.fail || 
             dfa == states.num ||
-            dfa == states.exponentStart || dfa == states.decimalStart && previousState == states.start)
+            dfa == states.exponentStart || 
+            dfa == states.decimalOnly || 
+            dfa == states.underscoreDecimal ||
+            dfa == states.underscoreExponent )
         {
             System.out.println();
         }
