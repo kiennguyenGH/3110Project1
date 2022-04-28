@@ -17,6 +17,319 @@ public class ReadString {
         done,
         fail
     }
+    private enum states2 {
+        q0, // Start state
+        q1,
+        q2,
+        q3,
+        q4,
+        q5,
+        q6,
+        q7,
+        q8,
+        q9,
+        q10,
+        q11 // Fail state
+    }
+
+    public float GetFloatFixed(String input)
+    {
+        int digitCount = 0;
+        int decimalCount = -1;
+        float finalNumber = 0;
+        states2 dfa = states2.q0;
+        for (int i = 0; i < input.length(); i++)
+        {
+            switch (dfa)
+            {
+                case q0:
+                    if (input.charAt(i) == '.')
+                    {
+                        dfa = states2.q7;
+                    }
+                    else if (input.charAt(i) == '1' ||
+                            input.charAt(i) == '2' ||
+                            input.charAt(i) == '3' ||
+                            input.charAt(i) == '4' ||
+                            input.charAt(i) == '5' ||
+                            input.charAt(i) == '6' ||
+                            input.charAt(i) == '7' ||
+                            input.charAt(i) == '8' ||
+                            input.charAt(i) == '9' ||
+                            input.charAt(i) == '0')
+                    {
+                        dfa = states2.q1;
+                        finalNumber += Character.getNumericValue(input.charAt(i)) * Math.pow(10, digitCount);
+                        digitCount++;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q1:
+                    if (input.charAt(i) == '.')
+                    {
+                        dfa = states2.q2;
+                    }
+                    else if (input.charAt(i) == '1' ||
+                            input.charAt(i) == '2' ||
+                            input.charAt(i) == '3' ||
+                            input.charAt(i) == '4' ||
+                            input.charAt(i) == '5' ||
+                            input.charAt(i) == '6' ||
+                            input.charAt(i) == '7' ||
+                            input.charAt(i) == '8' ||
+                            input.charAt(i) == '9' ||
+                            input.charAt(i) == '0')
+                    {
+                        dfa = states2.q1;
+                        finalNumber += Character.getNumericValue(input.charAt(i)) * Math.pow(10, digitCount);
+                        digitCount++;
+                    }
+                    else if (input.charAt(i) == 'e' ||
+                             input.charAt(i) == 'E')
+                    {
+                        dfa = states2.q4;
+                    }
+                    else if (input.charAt(i) == 'd' ||
+                            input.charAt(i) == 'D' ||
+                            input.charAt(i) == 'f' ||
+                            input.charAt(i) == 'F')
+                    {
+                        dfa = states2.q6;
+                    }
+                    else if (input.charAt(i) == '_')
+                    {
+                        dfa = states2.q8;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q2:
+                    if (input.charAt(i) == '1' ||
+                    input.charAt(i) == '2' ||
+                    input.charAt(i) == '3' ||
+                    input.charAt(i) == '4' ||
+                    input.charAt(i) == '5' ||
+                    input.charAt(i) == '6' ||
+                    input.charAt(i) == '7' ||
+                    input.charAt(i) == '8' ||
+                    input.charAt(i) == '9' ||
+                    input.charAt(i) == '0')
+                    {
+                        dfa = states2.q3;
+                    }
+                    else if (input.charAt(i) == 'e' ||
+                             input.charAt(i) == 'E')
+                    {
+                        dfa = states2.q4;
+                    }
+                    else if (input.charAt(i) == 'd' ||
+                            input.charAt(i) == 'D' ||
+                            input.charAt(i) == 'f' ||
+                            input.charAt(i) == 'F')
+                    {
+                        dfa = states2.q6;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q3:
+                    if (input.charAt(i) == '1' ||
+                    input.charAt(i) == '2' ||
+                    input.charAt(i) == '3' ||
+                    input.charAt(i) == '4' ||
+                    input.charAt(i) == '5' ||
+                    input.charAt(i) == '6' ||
+                    input.charAt(i) == '7' ||
+                    input.charAt(i) == '8' ||
+                    input.charAt(i) == '9' ||
+                    input.charAt(i) == '0')
+                    {
+                        dfa = states2.q3;
+                    }
+                    else if (input.charAt(i) == '_')
+                    {
+                        dfa = states2.q9;
+                    }
+                    else if (input.charAt(i) == 'e' ||
+                             input.charAt(i) == 'E')
+                    {
+                        dfa = states2.q4;
+                    }
+                    else if (input.charAt(i) == 'd' ||
+                            input.charAt(i) == 'D' ||
+                            input.charAt(i) == 'f' ||
+                            input.charAt(i) == 'F')
+                    {
+                        dfa = states2.q6;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q4:
+                    if (input.charAt(i) == '1' ||
+                        input.charAt(i) == '2' ||
+                        input.charAt(i) == '3' ||
+                        input.charAt(i) == '4' ||
+                        input.charAt(i) == '5' ||
+                        input.charAt(i) == '6' ||
+                        input.charAt(i) == '7' ||
+                        input.charAt(i) == '8' ||
+                        input.charAt(i) == '9' ||
+                        input.charAt(i) == '0')
+                    {
+                        dfa = states2.q5;
+                    }
+                    else 
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q5:
+                    if (input.charAt(i) == '1' ||
+                        input.charAt(i) == '2' ||
+                        input.charAt(i) == '3' ||
+                        input.charAt(i) == '4' ||
+                        input.charAt(i) == '5' ||
+                        input.charAt(i) == '6' ||
+                        input.charAt(i) == '7' ||
+                        input.charAt(i) == '8' ||
+                        input.charAt(i) == '9' ||
+                        input.charAt(i) == '0')
+                    {
+                        dfa = states2.q5;
+                    }
+                    else if (input.charAt(i) == '_')
+                    {
+                        dfa = states2.q10;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q6:
+                    dfa = states2.q11;
+                    break;
+                case q7:
+                    if (input.charAt(i) == '1' ||
+                        input.charAt(i) == '2' ||
+                        input.charAt(i) == '3' ||
+                        input.charAt(i) == '4' ||
+                        input.charAt(i) == '5' ||
+                        input.charAt(i) == '6' ||
+                        input.charAt(i) == '7' ||
+                        input.charAt(i) == '8' ||
+                        input.charAt(i) == '9' ||
+                        input.charAt(i) == '0')
+                    {
+                        dfa = states2.q3;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q8:
+                    if (input.charAt(i) == '1' ||
+                        input.charAt(i) == '2' ||
+                        input.charAt(i) == '3' ||
+                        input.charAt(i) == '4' ||
+                        input.charAt(i) == '5' ||
+                        input.charAt(i) == '6' ||
+                        input.charAt(i) == '7' ||
+                        input.charAt(i) == '8' ||
+                        input.charAt(i) == '9' ||
+                        input.charAt(i) == '0')
+                    {
+                        dfa = states2.q1;
+                    }
+                    else if (input.charAt(i) == '_')
+                    {
+                        dfa = states2.q8;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q9:
+                    if (input.charAt(i) == '1' ||
+                        input.charAt(i) == '2' ||
+                        input.charAt(i) == '3' ||
+                        input.charAt(i) == '4' ||
+                        input.charAt(i) == '5' ||
+                        input.charAt(i) == '6' ||
+                        input.charAt(i) == '7' ||
+                        input.charAt(i) == '8' ||
+                        input.charAt(i) == '9' ||
+                        input.charAt(i) == '0')
+                    {
+                        dfa = states2.q3;
+                    }
+                    else if (input.charAt(i) == '_')
+                    {
+                        dfa = states2.q9;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                    break;
+                case q10:
+                    if (input.charAt(i) == '1' ||
+                        input.charAt(i) == '2' ||
+                        input.charAt(i) == '3' ||
+                        input.charAt(i) == '4' ||
+                        input.charAt(i) == '5' ||
+                        input.charAt(i) == '6' ||
+                        input.charAt(i) == '7' ||
+                        input.charAt(i) == '8' ||
+                        input.charAt(i) == '9' ||
+                        input.charAt(i) == '0')
+                    {
+                        dfa = states2.q5;
+                    }
+                    else if (input.charAt(i) == '_')
+                    {
+                        dfa = states2.q10;
+                    }
+                    else
+                    {
+                        dfa = states2.q11;
+                    }
+                default:
+                    dfa = states2.q11;
+                    break;
+            }
+            // If in fail state, break out of loop early
+            if (dfa == states2.q11)
+            {
+                break;
+            }
+        }
+        // Check if dfa is in an accept state
+        if (dfa == states2.q2 ||
+            dfa == states2.q3 ||
+            dfa == states2.q5 ||
+            dfa == states2.q6)
+        {
+
+        }
+        else
+        {
+            return -1;
+        }
+        return finalNumber;
+    }
 
     //Use dfa to read string input
     public void GetFloat(String input)
