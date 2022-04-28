@@ -20,11 +20,11 @@ public class ReadString {
 
     public float GetFloat(String input)
     {
-        int digitCount = 0;
         int decimalCount = -1;
-        int exponentCount = 0;
-        float exponent = 0;
         float finalNumber = 0;
+        float exponentValue = 0;
+        String integer = "";
+        String exponent = "";
         states dfa = states.q0;
         for (int i = 0; i < input.length(); i++)
         {
@@ -47,8 +47,7 @@ public class ReadString {
                             input.charAt(i) == '0')
                     {
                         dfa = states.q1;
-                        finalNumber += Character.getNumericValue(input.charAt(i)) * Math.pow(10, digitCount);
-                        digitCount++;
+                        integer += input.charAt(i);
                     }
                     else
                     {
@@ -72,8 +71,7 @@ public class ReadString {
                             input.charAt(i) == '0')
                     {
                         dfa = states.q1;
-                        finalNumber += Character.getNumericValue(input.charAt(i)) * Math.pow(10, digitCount);
-                        digitCount++;
+                        integer += input.charAt(i);
                     }
                     else if (input.charAt(i) == 'e' ||
                              input.charAt(i) == 'E')
@@ -179,8 +177,8 @@ public class ReadString {
                         input.charAt(i) == '0')
                     {
                         dfa = states.q5;
-                        exponent += Character.getNumericValue(input.charAt(i)) * Math.pow(10, exponentCount);
-                        exponentCount++;
+                        exponent += input.charAt(i);
+                        
                     }
                     else 
                     {
@@ -200,12 +198,19 @@ public class ReadString {
                         input.charAt(i) == '0')
                     {
                         dfa = states.q5;
-                        exponent += Character.getNumericValue(input.charAt(i)) * Math.pow(10, exponentCount);
-                        exponentCount++;
+                        exponent += input.charAt(i);
+                        
                     }
                     else if (input.charAt(i) == '_')
                     {
                         dfa = states.q10;
+                    }
+                    else if (input.charAt(i) == 'd' ||
+                            input.charAt(i) == 'D' ||
+                            input.charAt(i) == 'f' ||
+                            input.charAt(i) == 'F')
+                    {
+                        dfa = states.q6;
                     }
                     else
                     {
@@ -247,8 +252,8 @@ public class ReadString {
                         input.charAt(i) == '0')
                     {
                         dfa = states.q1;
-                        finalNumber += Character.getNumericValue(input.charAt(i)) * Math.pow(10, digitCount);
-                        digitCount++;
+                        integer += input.charAt(i);
+                        
                     }
                     else if (input.charAt(i) == '_')
                     {
@@ -297,8 +302,8 @@ public class ReadString {
                         input.charAt(i) == '0')
                     {
                         dfa = states.q5;
-                        exponent += Character.getNumericValue(input.charAt(i)) * Math.pow(10, exponentCount);
-                        exponentCount++;
+                        exponent += input.charAt(i);
+                        
                     }
                     else if (input.charAt(i) == '_')
                     {
@@ -324,7 +329,21 @@ public class ReadString {
             dfa == states.q5 ||
             dfa == states.q6)
         {
-            finalNumber *= Math.pow(10, exponent);
+            int count = 0;
+            for (int i = integer.length()-1; i >= 0; i--)
+            {
+                float integerValue = (float)Math.pow(10, count) * Character.getNumericValue(integer.charAt(i));
+                count++;
+                finalNumber += integerValue;
+            }
+            count = 0;
+            for (int i = exponent.length() - 1; i >= 0; i--)
+            {
+                float exponentVal = (float)Math.pow(10,count) * Character.getNumericValue(exponent.charAt(i));
+                count++;
+                exponentValue += exponentVal;
+            }
+            finalNumber *= Math.pow(10, exponentValue);
         }
         else
         {
