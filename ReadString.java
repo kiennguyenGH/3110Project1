@@ -15,7 +15,8 @@ public class ReadString {
         q8,
         q9,
         q10,
-        q11 // Fail state
+        q11,
+        q12 // Fail state
     }
 
     public float GetFloat(String input)
@@ -26,6 +27,7 @@ public class ReadString {
         String integer = "";
         String exponent = "";
         states dfa = states.q0;
+        boolean negativeExponent = false;
         for (int i = 0; i < input.length(); i++)
         {
             switch (dfa)
@@ -51,7 +53,7 @@ public class ReadString {
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
                     break;
                 case q1:
@@ -91,7 +93,7 @@ public class ReadString {
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
                     break;
                 case q2:
@@ -124,7 +126,7 @@ public class ReadString {
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
                     break;
                 case q3:
@@ -161,7 +163,7 @@ public class ReadString {
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
                     break;
                 case q4:
@@ -180,9 +182,18 @@ public class ReadString {
                         exponent += input.charAt(i);
                         
                     }
-                    else 
+                    else if (input.charAt(i) == '-')
                     {
                         dfa = states.q11;
+                        negativeExponent = true;
+                    }
+                    else if (input.charAt(i) == '+')
+                    {
+                        dfa = states.q11;
+                    }
+                    else 
+                    {
+                        dfa = states.q12;
                     }
                     break;
                 case q5:
@@ -214,11 +225,11 @@ public class ReadString {
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
                     break;
                 case q6:
-                    dfa = states.q11;
+                    dfa = states.q12;
                     break;
                 case q7:
                     if (input.charAt(i) == '1' ||
@@ -233,10 +244,12 @@ public class ReadString {
                         input.charAt(i) == '0')
                     {
                         dfa = states.q3;
+                        finalNumber += Character.getNumericValue(input.charAt(i)) * Math.pow(10, decimalCount);
+                        decimalCount--;
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
                     break;
                 case q8:
@@ -261,7 +274,7 @@ public class ReadString {
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
                     break;
                 case q9:
@@ -286,7 +299,7 @@ public class ReadString {
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
                     break;
                 case q10:
@@ -311,14 +324,30 @@ public class ReadString {
                     }
                     else
                     {
-                        dfa = states.q11;
+                        dfa = states.q12;
                     }
+                case q11:
+                    if (input.charAt(i) == '1' ||
+                        input.charAt(i) == '2' ||
+                        input.charAt(i) == '3' ||
+                        input.charAt(i) == '4' ||
+                        input.charAt(i) == '5' ||
+                        input.charAt(i) == '6' ||
+                        input.charAt(i) == '7' ||
+                        input.charAt(i) == '8' ||
+                        input.charAt(i) == '9' ||
+                        input.charAt(i) == '0')
+                    {
+                        dfa = states.q5;
+                        exponent += input.charAt(i);
+                    }
+                    break;
                 default:
-                    dfa = states.q11;
+                    dfa = states.q12;
                     break;
             }
             // If in fail state, break out of loop early
-            if (dfa == states.q11)
+            if (dfa == states.q12)
             {
                 break;
             }
@@ -337,12 +366,18 @@ public class ReadString {
                 finalNumber += integerValue;
             }
             count = 0;
+            System.out.println(exponent);
             for (int i = exponent.length() - 1; i >= 0; i--)
             {
                 float exponentVal = (float)Math.pow(10,count) * Character.getNumericValue(exponent.charAt(i));
                 count++;
                 exponentValue += exponentVal;
             }
+            if (negativeExponent == true)
+            {
+                exponentValue *= -1;
+            }
+
             finalNumber *= Math.pow(10, exponentValue);
         }
         else
