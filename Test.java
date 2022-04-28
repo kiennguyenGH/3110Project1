@@ -3,6 +3,7 @@ public class Test
 {
     public static void main (String[] args)
     {
+        float value;
         ReadString reader = new ReadString();
         String input = "";
         Scanner scanner = new Scanner(System.in);
@@ -15,8 +16,16 @@ public class Test
             {
                 break;
             }
+            value = reader.GetFloat(input);
+            if (value == -1)
+            {
+                System.out.println("");
+            }
+            else
+            {
+                System.out.println(value);
+            }
             
-            reader.GetFloat(input);
         }
         scanner.close();
 
