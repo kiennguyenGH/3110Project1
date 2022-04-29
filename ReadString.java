@@ -315,7 +315,7 @@ public class ReadString {
                         input.charAt(i) == '0')
                     {
                         dfa = states.q5;
-                        exponent += input.charAt(i);
+                        // exponent += input.charAt(i);
                         
                     }
                     else if (input.charAt(i) == '_')
