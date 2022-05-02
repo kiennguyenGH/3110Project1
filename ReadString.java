@@ -19,6 +19,18 @@ public class ReadString {
         q12 // Fail state
     }
 
+    /*Traverses through string inputed
+    Uses enum to traverse through states
+    If statements function as transitions
+    If character read is valid, jump to next state
+    If character is invalid, jump to fail state
+    If enum is in fail state, break out of the for loop early
+    When for loop is finished, uses if statement to check if state is in an accept state
+    If final state is an accept state, calculate the final float and return the float
+    If String is not accepted, return -1
+    Function calculates accepted float by saving whole numbers and exponents to separate strings, and adds decimal to float variable
+    Then whole number is added to float variable, and then multiplied by the value of the exponent
+    */
     public float GetFloat(String input)
     {
         int decimalCount = -1;
@@ -359,6 +371,7 @@ public class ReadString {
             dfa == states.q6)
         {
             int count = 0;
+            // Add whole number to finalNumber
             for (int i = integer.length()-1; i >= 0; i--)
             {
                 float integerValue = (float)Math.pow(10, count) * Character.getNumericValue(integer.charAt(i));
@@ -367,6 +380,7 @@ public class ReadString {
             }
             count = 0;
             System.out.println(exponent);
+            // Add exponent to finalNumber
             for (int i = exponent.length() - 1; i >= 0; i--)
             {
                 float exponentVal = (float)Math.pow(10,count) * Character.getNumericValue(exponent.charAt(i));
@@ -380,6 +394,7 @@ public class ReadString {
 
             finalNumber *= Math.pow(10, exponentValue);
         }
+        // String not accepted
         else
         {
             return -1;
