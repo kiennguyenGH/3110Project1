@@ -11,3 +11,5 @@ How to run program:
 
   With java IDE:
   - Run Test.java with IDE compatible with java
+
+Program may not handle certain underscore cases
